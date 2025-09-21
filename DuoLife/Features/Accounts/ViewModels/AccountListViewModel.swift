@@ -22,5 +22,21 @@ class AccountListViewModel: ObservableObject {
             }
         }
     }
+    
+    func deleteAccount(at offsets: IndexSet) {
+        for index in offsets {
+            let account = accounts[index]
+            
+            firestore.deleteAccount(account) { success in
+                DispatchQueue.main.async {
+                    if success {
+                        self.accounts.remove(at: index)
+                    } else {
+                        // Optionally handle failure (e.g., show an alert)
+                    }
+                }
+            }
+        }
+    }
 }
 

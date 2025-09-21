@@ -11,6 +11,7 @@ struct AccountListView: View {
                         Text(account.name)
                     }
                 }
+                .onDelete(perform: viewModel.deleteAccount)
             }
             .navigationTitle("Accounts")
             .toolbar {
