@@ -2,9 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @StateObject private var vm = SettingsViewModel()
-    @EnvironmentObject var masterManager: MasterPasswordManager
-    
-    @ObservedObject var passwordVM: PasswordMasterViewModel
+    @EnvironmentObject var masterManager: MasterPasswordManager   // ✅ only dependency
 
     var body: some View {
         NavigationStack {
@@ -16,7 +14,7 @@ struct SettingsView: View {
                     SecureField("Confirm New Password", text: $vm.confirmPassword)
 
                     Button("Update Password") {
-                        vm.updateMasterPassword(masterManager: masterManager)
+                        vm.updateMasterPassword(using: masterManager)
                     }
                     .buttonStyle(.borderedProminent)
                 }
@@ -30,7 +28,7 @@ struct SettingsView: View {
                     TextField("Enter reset token", text: $vm.resetToken)
 
                     Button("Reset Master Password") {
-                        vm.resetMasterPassword(masterManager: masterManager, passwordVM: passwordVM)
+                        vm.resetMasterPassword(using: masterManager)
                     }
                     .tint(.red)
                 }

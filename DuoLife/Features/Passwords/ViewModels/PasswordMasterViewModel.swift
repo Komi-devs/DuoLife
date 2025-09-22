@@ -1,34 +1,51 @@
 import SwiftUI
 
-class PasswordMasterViewModel: ObservableObject {
-    @Published var masterPassword = ""
-    @Published var isAuthenticated = false
-    @Published var showError = false
-    @Published var isFirstTime = false
-    
+final class PasswordMasterViewModel: ObservableObject {
+    @Published var inputPassword: String = ""
+
+    var masterManager: MasterPasswordManager
+
     init(masterManager: MasterPasswordManager) {
-        self.isFirstTime = !masterManager.hasMasterPassword()
+        self.masterManager = masterManager
     }
 
-    func submitPassword(masterManager: MasterPasswordManager) {
+    var isFirstTime: Bool {
+        !masterManager.hasMasterPassword()
+    }
+
+    var showError: Bool {
+        // true when user has tried to log in and manager.isAuthenticated is still false
+        !isFirstTime && !masterManager.isAuthenticated && !inputPassword.isEmpty
+    }
+
+    func submit() {
         if isFirstTime {
-            try? masterManager.setMasterPassword(masterPassword)
-            isAuthenticated = true
-            masterManager.isAuthenticated = true
+            do {
+                try masterManager.setMasterPassword(inputPassword)
+                _ = masterManager.authenticate(inputPassword)   // mark as authenticated & store in memory
+            } catch {
+                print("Error setting master password:", error)
+            }
         } else {
-            if masterManager.authenticate(masterPassword) {
-                isAuthenticated = true
-                masterManager.isAuthenticated = true
-            } else {
-                showError = true
+            if !masterManager.authenticate(inputPassword) {
+                // manager.isAuthenticated remains false → showError will be true
             }
         }
+        inputPassword = ""
+    }
+
+    func resetForNewSession() {
+        inputPassword = ""
+        masterManager.signOut()
     }
     
-    func refreshFirstTime(masterManager: MasterPasswordManager) {
-        masterPassword = ""
-        showError = false
-        isAuthenticated = false
-        isFirstTime = !masterManager.hasMasterPassword()
+    /// New method to refresh the first-time state
+    func refreshFirstTime() {
+        // Clear the input
+        inputPassword = ""
+        // Sign out to reset authentication state
+        masterManager.signOut()
+        // Trigger any @Published observers (if needed)
+        objectWillChange.send()
     }
 }

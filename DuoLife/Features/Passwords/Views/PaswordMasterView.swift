@@ -1,29 +1,28 @@
 import SwiftUI
 
 struct PasswordMasterView: View {
-    @EnvironmentObject private var masterManager: MasterPasswordManager
-    @StateObject private var vm: PasswordMasterViewModel
+    @StateObject private var viewModel: PasswordMasterViewModel
 
-    init(viewModel: PasswordMasterViewModel) {
-        _vm = StateObject(wrappedValue: viewModel)
+    init(masterManager: MasterPasswordManager) {
+        _viewModel = StateObject(wrappedValue: PasswordMasterViewModel(masterManager: masterManager))
     }
-
+    
     var body: some View {
         VStack(spacing: 20) {
-            Text(vm.isFirstTime ? "Set Master Password" : "Enter Master Password")
+            Text(viewModel.isFirstTime ? "Set Master Password" : "Enter Master Password")
                 .font(.title)
 
-            SecureField("Master Password", text: $vm.masterPassword)
+            SecureField("Master Password", text: $viewModel.inputPassword)
                 .textFieldStyle(.roundedBorder)
-                .padding()
+                .padding(.horizontal)
 
-            Button(vm.isFirstTime ? "Set Password" : "Unlock") {
-                vm.submitPassword(masterManager: masterManager)
+            Button(viewModel.isFirstTime ? "Set Password" : "Unlock") {
+                viewModel.submit()
             }
-            .padding()
             .buttonStyle(.borderedProminent)
+            .padding()
 
-            if vm.showError {
+            if viewModel.showError {
                 Text("Wrong password, try again.")
                     .foregroundColor(.red)
             }

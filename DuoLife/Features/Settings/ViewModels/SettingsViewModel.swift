@@ -1,15 +1,16 @@
-import SwiftUI
+import Foundation
 
 class SettingsViewModel: ObservableObject {
     @Published var oldPassword = ""
     @Published var newPassword = ""
     @Published var confirmPassword = ""
-    @Published var resetToken = ""         // for admin/confirm input
+    @Published var resetToken = ""     // "admin" or "confirm"
     @Published var message: String?
 
-    private let adminPassword = "admin"    // <-- keep secret / move to secure storage
+    private let adminPassword = "admin"
 
-    func updateMasterPassword(masterManager: MasterPasswordManager) {
+    // Change the master password
+    func updateMasterPassword(using manager: MasterPasswordManager) {
         guard !oldPassword.isEmpty, !newPassword.isEmpty else {
             message = "All fields are required."
             return
@@ -19,7 +20,7 @@ class SettingsViewModel: ObservableObject {
             return
         }
         do {
-            let updated = try masterManager.updateMasterPassword(
+            let updated = try manager.updateMasterPassword(
                 oldPassword: oldPassword,
                 newPassword: newPassword
             )
@@ -29,28 +30,24 @@ class SettingsViewModel: ObservableObject {
         }
     }
 
-    /// Reset logic:
-    ///  - "admin" keeps encrypted data
-    ///  - "confirm" wipes all secure data
-    func resetMasterPassword(masterManager: MasterPasswordManager, passwordVM: PasswordMasterViewModel) {
-        print(resetToken)
+    // Reset logic: "admin" keeps encrypted data, "confirm" wipes everything
+    func resetMasterPassword(using manager: MasterPasswordManager) {
         let token = resetToken.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        
+
         switch token {
         case adminPassword:
-            // only delete the stored master hash; encrypted passwords remain
-            masterManager.removeMasterPasswordOnly()
-            masterManager.isAuthenticated = false
+            manager.removeMasterPasswordOnly()
+            manager.signOut()
             message = "Master password cleared (data kept)."
         case "confirm":
-            // remove master hash and all user data (call your Firebase deletion if needed)
-            masterManager.removeAllData()
-            masterManager.isAuthenticated = false 
+            manager.removeAllData()
+            manager.signOut()
             message = "Master password and all encrypted data removed."
         default:
             message = "Invalid reset token."
         }
+
+        // Reset the field for security
         resetToken = ""
-        passwordVM.refreshFirstTime(masterManager: masterManager)
     }
 }

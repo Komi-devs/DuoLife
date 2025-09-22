@@ -1,10 +1,3 @@
-//
-//  DuoLifeApp.swift
-//  DuoLife
-//
-//  Created by Nathan Goldnadel on 14/09/2025.
-//
-
 import SwiftUI
 import Firebase
 
@@ -19,37 +12,32 @@ struct DuoLifeApp: App {
     var body: some Scene {
         WindowGroup {
             MainTabView()
-                .environmentObject(masterManager)   // inject globally
+                .environmentObject(masterManager) // inject globally
         }
     }
 }
 
+
 struct MainTabView: View {
     @EnvironmentObject var masterManager: MasterPasswordManager
-    @State private var selectedTab = 1   // 0 = Accounts, 1 = Password, 2 = Settings
-
-    // Keep a single instance of PasswordMasterViewModel
-    @StateObject private var passwordVM: PasswordMasterViewModel
-
-    init() {
-        // Initialize here with a placeholder; real masterManager will be injected in body
-        _passwordVM = StateObject(wrappedValue: PasswordMasterViewModel(masterManager: MasterPasswordManager()))
-    }
+    @State private var selectedTab = 1
 
     var body: some View {
         TabView(selection: $selectedTab) {
+            // ---------- Accounts ----------
             AccountListView()
                 .tabItem {
                     Label("Accounts", systemImage: "list.bullet")
                 }
                 .tag(0)
 
+            // ---------- Passwords ----------
             Group {
                 if masterManager.isAuthenticated {
                     PasswordCategoryListView()
-                } else {
-                    PasswordMasterView(viewModel: passwordVM)
                         .environmentObject(masterManager)
+                } else {
+                    PasswordMasterView(masterManager: masterManager)
                 }
             }
             .tabItem {
@@ -57,16 +45,13 @@ struct MainTabView: View {
             }
             .tag(1)
 
-            SettingsView(passwordVM: passwordVM)
+            // ---------- Settings ----------
+            SettingsView()
                 .environmentObject(masterManager)
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
                 .tag(2)
-        }
-        .onAppear {
-            // Update the PasswordMasterViewModel with the real masterManager injected via environment
-            passwordVM.refreshFirstTime(masterManager: masterManager)
         }
     }
 }
