@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8C6965812E80662C0004147A /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 8C6965802E80662C0004147A /* KeychainAccess */; };
 		8CC49F072E76D56D00D0376C /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC49F062E76D56D00D0376C /* FirebaseCore */; };
 		8CC49F092E76D56D00D0376C /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC49F082E76D56D00D0376C /* FirebaseDatabase */; };
 		8CC49F0B2E76D56D00D0376C /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 8CC49F0A2E76D56D00D0376C /* FirebaseFirestore */; };
@@ -34,6 +35,7 @@
 				8CC49F3D2E775FB700D0376C /* FirebaseFirestoreCombine-Community in Frameworks */,
 				8CC49F072E76D56D00D0376C /* FirebaseCore in Frameworks */,
 				8CC49F0B2E76D56D00D0376C /* FirebaseFirestore in Frameworks */,
+				8C6965812E80662C0004147A /* KeychainAccess in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +82,7 @@
 				8CC49F082E76D56D00D0376C /* FirebaseDatabase */,
 				8CC49F0A2E76D56D00D0376C /* FirebaseFirestore */,
 				8CC49F3C2E775FB700D0376C /* FirebaseFirestoreCombine-Community */,
+				8C6965802E80662C0004147A /* KeychainAccess */,
 			);
 			productName = DuoLife;
 			productReference = 8CC49EF72E76D4FA00D0376C /* DuoLife.app */;
@@ -111,6 +114,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				8CC49F052E76D56D00D0376C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				8C69657F2E80662C0004147A /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8CC49EF82E76D4FA00D0376C /* Products */;
@@ -344,6 +348,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		8C69657F2E80662C0004147A /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		8CC49F052E76D56D00D0376C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -355,6 +367,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8C6965802E80662C0004147A /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8C69657F2E80662C0004147A /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
 		8CC49F062E76D56D00D0376C /* FirebaseCore */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8CC49F052E76D56D00D0376C /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
