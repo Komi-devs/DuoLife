@@ -8,6 +8,7 @@ class SettingsViewModel: ObservableObject {
     @Published var message: String?
 
     private let adminPassword = "admin"
+    private let firestore = FirestoreService()
 
     // Change the master password
     func updateMasterPassword(using manager: MasterPasswordManager) {
@@ -40,9 +41,19 @@ class SettingsViewModel: ObservableObject {
             manager.signOut()
             message = "Master password cleared (data kept)."
         case "confirm":
-            manager.removeAllData()
-            manager.signOut()
-            message = "Master password and all encrypted data removed."
+            manager.resetMasterPasswordAndCleanDatabase(
+                firestore: firestore
+            ) { [weak self] result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success:
+                        manager.signOut()
+                        self?.message = "Master password and all encrypted data removed."
+                    case .failure(let error):
+                        self?.message = "Cleanup failed: \(error.localizedDescription)"
+                    }
+                }
+            }
         default:
             message = "Invalid reset token."
         }

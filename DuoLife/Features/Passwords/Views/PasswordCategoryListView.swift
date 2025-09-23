@@ -11,6 +11,12 @@ struct PasswordCategoryListView: View {
                     NavigationLink(
                         destination: StoredPasswordListView(category: category)
                             .environmentObject(masterManager)
+                            .environmentObject(
+                                StoredPasswordListViewModel(
+                                    categoryId: category.id ?? "",
+                                    masterManager: masterManager
+                                )
+                            )
                     ) {
                         Text(category.name)
                     }

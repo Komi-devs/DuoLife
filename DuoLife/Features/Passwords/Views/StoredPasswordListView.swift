@@ -4,17 +4,10 @@ struct StoredPasswordListView: View {
     let category: PasswordCategory
     
     @EnvironmentObject var masterManager: MasterPasswordManager
-    @StateObject private var viewModel: StoredPasswordListViewModel
+    @EnvironmentObject var viewModel: StoredPasswordListViewModel
 
     init(category: PasswordCategory) {
         self.category = category
-        // VM will be initialized later once we have the environment manager
-        _viewModel = StateObject(
-            wrappedValue: StoredPasswordListViewModel(
-                categoryId: category.id ?? "",
-                masterManager: MasterPasswordManager() // temporary placeholder
-            )
-        )
     }
 
     var body: some View {
@@ -44,9 +37,6 @@ struct StoredPasswordListView: View {
             if viewModel.masterManager !== masterManager {
                 viewModel.masterManager = masterManager
             }
-            viewModel.loadPasswords()
-        }
-        .onChange(of: masterManager.masterPassword) { _ in
             viewModel.loadPasswords()
         }
     }
