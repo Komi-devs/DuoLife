@@ -1,17 +1,33 @@
 import SwiftUI
 
 struct GroceriesMainView: View {
+    @StateObject private var shoppingVM = GroceryListViewModel()
+    @StateObject private var ownedVM = OwnedGroceriesViewModel()
+
+    @State private var selectedTab = 0
+
     var body: some View {
         NavigationStack {
-            List {
-                NavigationLink("Shopping List") {
+            VStack {
+                // Optional top segmented control
+                Picker("View", selection: $selectedTab) {
+                    Text("Shopping List").tag(0)
+                    Text("Owned Groceries").tag(1)
+                }
+                .pickerStyle(.segmented)
+                .padding()
+
+                // Swipeable pages
+                TabView(selection: $selectedTab) {
                     GroceryListView()
-                        .environmentObject(GroceryListViewModel())
-                }
-                NavigationLink("Owned Groceries") {
+                        .environmentObject(shoppingVM)
+                        .tag(0)
+
                     OwnedGroceriesView()
-                        .environmentObject(OwnedGroceriesViewModel())
+                        .environmentObject(ownedVM)
+                        .tag(1)
                 }
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
             }
             .navigationTitle("Groceries")
         }
