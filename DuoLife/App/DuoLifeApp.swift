@@ -40,10 +40,24 @@ struct MainTabView: View {
                     PasswordMasterView(masterManager: masterManager)
                 }
             }
+            .tabItem {
+                Label("Password", systemImage: masterManager.isAuthenticated ? "lock.open" : "lock.fill")
+            }
+            .tag(1)
+
+            // ---------- Groceries ----------
+            GroceriesMainView()     // 👈 new combined groceries section
                 .tabItem {
-                    Label("Password", systemImage: masterManager.isAuthenticated ? "lock.open" : "lock.fill")
+                    Label("Groceries", systemImage: "cart")
                 }
-                .tag(1)
+                .tag(2)
+            
+            // ---------- Restaurants ----------
+            RestaurantListView()
+                .tabItem {
+                    Label("Restaurants", systemImage: "fork.knife")
+                }
+                .tag(3)
 
             // ---------- Settings ----------
             SettingsView()
@@ -51,7 +65,7 @@ struct MainTabView: View {
                 .tabItem {
                     Label("Settings", systemImage: "gear")
                 }
-                .tag(2)
+                .tag(4)
         }
     }
 }
