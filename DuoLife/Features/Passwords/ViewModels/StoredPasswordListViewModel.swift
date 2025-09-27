@@ -7,7 +7,7 @@ final class StoredPasswordListViewModel: ObservableObject {
 
     let categoryId: String
     var masterManager: MasterPasswordManager
-    private let firestore = FirestoreService()
+    private let firestore = PasswordsService()
 
     init(categoryId: String, masterManager: MasterPasswordManager) {
         self.categoryId = categoryId

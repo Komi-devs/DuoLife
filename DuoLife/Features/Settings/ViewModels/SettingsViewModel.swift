@@ -8,7 +8,7 @@ class SettingsViewModel: ObservableObject {
     @Published var message: String?
 
     private let adminPassword = "admin"
-    private let firestore = FirestoreService()
+    private let firestore = PasswordsService()
 
     // Change the master password
     func updateMasterPassword(using manager: MasterPasswordManager) {

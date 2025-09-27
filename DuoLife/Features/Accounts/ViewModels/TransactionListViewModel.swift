@@ -5,7 +5,7 @@ class TransactionListViewModel: ObservableObject {
     @Published var balance: Double = 0.0
     @Published var showAddSheet = false
     
-    private let firestore = FirestoreService()
+    private let firestore = AccountsService()
     
     func loadTransactions(for accountId: String) {
         firestore.fetchTransactions(for: accountId) { txs in

@@ -5,7 +5,7 @@ final class PasswordCategoryListViewModel: ObservableObject {
     @Published var categories: [PasswordCategory] = []
     @Published var showAddSheet = false
 
-    private let firestore = FirestoreService()
+    private let firestore = PasswordsService()
 
     func loadCategories() {
         firestore.fetchPasswordCategories { [weak self] cats in

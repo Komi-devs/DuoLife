@@ -5,7 +5,7 @@ class AccountListViewModel: ObservableObject {
     @Published var accounts: [Account] = []
     @Published var showAddSheet: Bool = false
     
-    private let firestore = FirestoreService()
+    private let firestore = AccountsService()
     
     func loadAccounts() {
         firestore.fetchAccounts { accounts in

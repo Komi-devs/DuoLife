@@ -40,10 +40,10 @@ struct MainTabView: View {
                     PasswordMasterView(masterManager: masterManager)
                 }
             }
-            .tabItem {
-                Label("Password", systemImage: masterManager.isAuthenticated ? "lock.open" : "lock.fill")
-            }
-            .tag(1)
+                .tabItem {
+                    Label("Password", systemImage: masterManager.isAuthenticated ? "lock.open" : "lock.fill")
+                }
+                .tag(1)
 
             // ---------- Settings ----------
             SettingsView()

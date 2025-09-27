@@ -77,7 +77,7 @@ final class MasterPasswordManager: ObservableObject {
 
     /// Wipes everything, including all encrypted records if you add that logic.
     func resetMasterPasswordAndCleanDatabase(
-        firestore: FirestoreService,
+        firestore: PasswordsService,
         completion: @escaping (Result<Void,Error>) -> Void
     ) {
         // Remove master password from Keychain first
@@ -85,7 +85,7 @@ final class MasterPasswordManager: ObservableObject {
         resetSession()
         hasExistingMaster = false
 
-        // Ask FirestoreService to wipe all encrypted password data
+        // Ask PasswordsService to wipe all encrypted password data
         firestore.deleteAllPasswordData(completion: completion)
     }
 

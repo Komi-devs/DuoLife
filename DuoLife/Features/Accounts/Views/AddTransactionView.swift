@@ -12,7 +12,7 @@ struct AddTransactionView: View {
     @State private var date: Date = Date()
     @State private var isRecurring: Bool = false
 
-    private let firestore = FirestoreService()
+    private let firestore = AccountsService()
 
     var body: some View {
         NavigationView {
